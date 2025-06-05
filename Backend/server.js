@@ -29,6 +29,20 @@ app.get('/api/tasks', async(req,res)=>{
     }
 })
 
+app.get('/api/tasks/filter/:completed', async(req,res)=>{
+    try{
+        const completed = req.params.completed =='true'?true:false;
+            const filteredTasks = await Task.aggregate([
+                {$match:{completed:completed}}
+            ])
+                    res.json(filteredTasks)
+
+        }
+    catch(err){
+        res.json({error: err.message})
+    }
+})
+
 app.post('/api/tasks', async(req,res)=>{
     try{
         const task = req.body.task;
